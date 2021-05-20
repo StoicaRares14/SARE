@@ -1,7 +1,6 @@
 package org.example.project.Controllers;
 
 
-
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -22,6 +21,7 @@ import org.example.project.timing.Timer;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Objects;
@@ -34,9 +34,7 @@ import static java.lang.Math.sqrt;
 public class PrimaryController implements Initializable {
     @FXML
     public Button runButton;
-
-    @FXML
-    public ProgressBar progressBar;
+    
 
     @FXML
     public ChoiceBox nrThreads;
@@ -44,97 +42,55 @@ public class PrimaryController implements Initializable {
     @FXML
     public TextField workload;
 
-//	public String getSeqWriteResult() {
-//		return seqWriteResult;
-//	}
-//
-//	public String getSeqReadResult() {
-//		return seqReadResult;
-//	}
-//
-//	public String getRandWriteResult() {
-//		return randWriteResult;
-//	}
-//
-//	public String getRandReadResult() {
-//		return randReadResult;
-//	}
-//
-	private int  NumberThreads;
-	private String  Workload;
 
-	public int getNumberThreads() {
+    private int NumberThreads;
+    private String Workload;
 
-		if (nrThreads.getValue().equals("16")) {
-			NumberThreads = 16;
-		} else if (nrThreads.getValue().equals("32")) {
-			NumberThreads = 32;
-		} else if (nrThreads.getValue().equals("64")) {
-			NumberThreads = 64;
-		} else if (nrThreads.getValue().equals("128")) {
-			NumberThreads = 128;
-		}
+    public int getNumberThreads() {
 
-		return NumberThreads;
-	}
+        if (nrThreads.getValue().equals("16")) {
+            NumberThreads = 16;
+        } else if (nrThreads.getValue().equals("32")) {
+            NumberThreads = 32;
+        } else if (nrThreads.getValue().equals("64")) {
+            NumberThreads = 64;
+        } else if (nrThreads.getValue().equals("128")) {
+            NumberThreads = 128;
+        }
 
-	public int getWorkload() {
-		Workload = workload.getText();
-		return Integer.parseInt(Workload);
-	}
+        return NumberThreads;
+    }
 
-	CPUThreadedRoots bench = new CPUThreadedRoots();
-
-	@FXML
-	private Label label;
-
-	@FXML
-	private ChoiceBox<String> partition, size;
-
-	//private Task copyWorker;
-
-	Stage primeStage = null ;
-
-	private void ClosePrimaryWindow() {
-		primeStage = (Stage) workload.getScene().getWindow();
-		primeStage.close();
-	}
-
-	@FXML
-	private void Run() {
-
-//		progressBar.setProgress(0.0);
-//        Task copyWorker = createWorker();
-//
-//		progressBar.progressProperty().unbind();
-//		progressBar.progressProperty().bind(copyWorker.progressProperty());
-//		copyWorker.messageProperty().addListener((observable, oldValue, newValue) -> System.out.println(newValue));
-//		copyWorker.messageProperty().addListener((observable, oldValue, newValue) -> label.setText(newValue));
-//
-//		copyWorker.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-//			@Override
-//			public void handle(WorkerStateEvent workerStateEvent) {
-//				try {
-//					AlertBox.display("Finished", "Press the button to see the results");
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+    public int getWorkload() {
+        Workload = workload.getText();
+        return Integer.parseInt(Workload);
+    }
 
 
-		int tempNrThreads = getNumberThreads();
-		int tempWorkload = getWorkload();
+
+    Stage primeStage = null;
+
+    private void ClosePrimaryWindow() {
+        primeStage = (Stage) workload.getScene().getWindow();
+        primeStage.close();
+    }
+
+    @FXML
+    private void Run() {
 
 
-		CPUThreadedRoots bench = new CPUThreadedRoots();
+        int tempNrThreads = getNumberThreads();
+        int tempWorkload = getWorkload();
+
+
+        CPUThreadedRoots bench = new CPUThreadedRoots();
         ITimer timer = new Timer();
         ILogger log = new ConsoleLogger();
         TimeUnit timeUnit = TimeUnit.Sec;
 
         bench.initialize(tempWorkload);
         bench.warmUp();
-		long time = 1;
+        long time = 1;
         for (int i = 1; i <= tempNrThreads; i *= 2) {
             timer.start();
             bench.run(i);
@@ -143,74 +99,55 @@ public class PrimaryController implements Initializable {
         }
 
         DecimalFormat df = new DecimalFormat("#.###");
-        double score = ((sqrt(tempNrThreads)*tempWorkload) *1.0)/log10(time);
+        double score = ((sqrt(tempNrThreads) * tempWorkload) * 1.0) / log10(time);
 
-		System.out.println(df.format(score));
-
-		///write in fisier
+        System.out.println(df.format(score));
 
 
-			BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter("Score.txt"));
-			writer.write(String.valueOf(df.format(score)));
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("Score.txt"));
+            writer.write(String.valueOf(df.format(score)));
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(tempNrThreads);
         System.out.println(tempWorkload);
-		System.out.println(tempNrThreads*tempWorkload/time);
-
-		Stage primaryStage = new Stage();
-
-		try {
-			Parent root = (Parent) FXMLLoader.load(Objects.requireNonNull(this.getClass().getClassLoader().getResource("Secondary.fxml")));
-			primaryStage.setTitle("SARE-Benchmark");
-			primaryStage.setScene(new Scene(root));
-			primaryStage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        System.out.println(tempNrThreads * tempWorkload / time);
 
 
+        Stage primaryStage = new Stage();
 
-		ClosePrimaryWindow();
-	}
-
-
-
-
-
-
-	public void initialize(URL url, ResourceBundle rb) {
-
-		nrThreads.getItems().removeAll();
-		nrThreads.getItems().addAll("16", "32", "64", "128");
-		nrThreads.getSelectionModel().select("16");
-
-	}
+        try {
+            Parent root = (Parent) FXMLLoader.load(Objects.requireNonNull(this.getClass().getClassLoader().getResource("Secondary.fxml")));
+            primaryStage.setTitle("SARE-Benchmark");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
-//	public Task createWorker() {
-//
-//		return new Task() {
-//
-//			@Override
-//			protected Object call() throws Exception {
-//				for (int i = 0; i <= 100; i++) {
-//					if (i == 0)
-//						Thread.sleep(1000);
-//					// Thread.sleep(100);
-//					Thread.sleep(50);
-//					updateMessage("Task Completed : " + (i) + "%");
-//					updateProgress(i, 100);
-//
-//				}
-//				return true;
-//			}
-//		};
-//	}
+        ClosePrimaryWindow();
+    }
+
+
+    public void initialize(URL url, ResourceBundle rb) {
+
+        nrThreads.getItems().removeAll();
+        nrThreads.getItems().addAll("16", "32", "64", "128");
+        nrThreads.getSelectionModel().select("16");
+    }
+
 
 }

@@ -8,8 +8,7 @@
     <center>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <ProgressBar fx:id="progressBar" layoutX="268.0" layoutY="197.0" prefWidth="200.0" progress="0.0" style="-fx-background-color: #4c0080;" />
-                <Button fx:id="runButton" layoutX="340.0" layoutY="236.0" mnemonicParsing="false" onAction="#Run" style="-fx-background-color: TRANSPARENT;" text="RUN" textFill="#ff03cb">
+                <Button fx:id="runButton" layoutX="347.0" layoutY="284.0" mnemonicParsing="false" onAction="#Run" style="-fx-background-color: TRANSPARENT;" text="RUN" textFill="#ff03cb">
                     <font>
                         <Font name="Verdana Bold" size="15.0" />
                     </font>
@@ -24,18 +23,18 @@
                         <Font name="Verdana" size="15.0" />
                     </font>
                 </Text>
-                <ChoiceBox fx:id="nrThreads" layoutX="231.0" layoutY="127.0" prefHeight="31.0" prefWidth="90.0" />
-                <Text fill="#ff00b2" layoutX="203.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Threads">
+                <ChoiceBox fx:id="nrThreads" layoutX="238.0" layoutY="173.0" prefHeight="31.0" prefWidth="90.0" />
+                <Text fill="#ff00b2" layoutX="210.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of Threads">
                     <font>
                         <Font name="Verdana" size="15.0" />
                     </font>
                 </Text>
-                <Text fill="#ff00b2" layoutX="433.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Workload">
+                <Text fill="#ff00b2" layoutX="423.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Workload">
                     <font>
                         <Font name="Verdana" size="15.0" />
                     </font>
                 </Text>
-                <TextField fx:id="workload" layoutX="394.0" layoutY="130.0" />
+                <TextField fx:id="workload" layoutX="384.0" layoutY="174.0" />
             </children>
         </AnchorPane>
     </center>

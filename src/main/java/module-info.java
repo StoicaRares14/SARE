@@ -1,9 +1,6 @@
 module SARE {
-    requires javafx.controls;
     requires javafx.fxml;
-    requires commons.io;
-    requires com.fasterxml.jackson.databind;
-    requires java.desktop;
+    requires javafx.controls;
 
     opens org.example.project to javafx.fxml;
     opens org.example.project.Controllers to javafx.fxml;

@@ -2,6 +2,9 @@ package org.example.project.Controllers;
 
 
 
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,6 +23,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -138,9 +142,10 @@ public class PrimaryController implements Initializable {
             log.writeTime("[t=" + i + "] Finished in", time, timeUnit);
         }
 
+        DecimalFormat df = new DecimalFormat("#.##");
         double score = ((sqrt(tempNrThreads)*tempWorkload) *1.0)/log10(time);
 
-		System.out.println(score);
+		System.out.println(df.format(score));
 
 		///write in fisier
 
@@ -148,7 +153,7 @@ public class PrimaryController implements Initializable {
 			BufferedWriter writer = null;
 		try {
 			writer = new BufferedWriter(new FileWriter("Score.txt"));
-			writer.write(String.valueOf(score));
+			writer.write(String.valueOf(df.format(score)));
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();

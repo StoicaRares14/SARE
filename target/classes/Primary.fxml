@@ -8,7 +8,7 @@
     <center>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <ProgressBar fx:id="progressBar" layoutX="268.0" layoutY="197.0" prefWidth="200.0" style="-fx-background-color: #4c0080;" />
+                <ProgressBar fx:id="progressBar" layoutX="268.0" layoutY="197.0" prefWidth="200.0" progress="0.0" style="-fx-background-color: #4c0080;" />
                 <Button fx:id="runButton" layoutX="340.0" layoutY="236.0" mnemonicParsing="false" onAction="#Run" style="-fx-background-color: TRANSPARENT;" text="RUN" textFill="#ff03cb">
                     <font>
                         <Font name="Verdana Bold" size="15.0" />

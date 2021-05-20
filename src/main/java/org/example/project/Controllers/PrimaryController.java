@@ -142,7 +142,7 @@ public class PrimaryController implements Initializable {
             log.writeTime("[t=" + i + "] Finished in", time, timeUnit);
         }
 
-        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = new DecimalFormat("#.###");
         double score = ((sqrt(tempNrThreads)*tempWorkload) *1.0)/log10(time);
 
 		System.out.println(df.format(score));

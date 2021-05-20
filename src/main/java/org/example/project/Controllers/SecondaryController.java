@@ -9,10 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import org.example.project.Score;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -31,11 +29,11 @@ public class SecondaryController implements Initializable {
 
     Stage scoreStage = null;
 
-    Score score = new Score();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setScoreLabel();
+            setScoreLabel();
+
 
     }
 
@@ -44,8 +42,24 @@ public class SecondaryController implements Initializable {
         scoreStage.close();
     }
 
-    public void setScoreLabel(){
-       scoreLabel.setText(String.valueOf(Score.getScore()));
+    public void setScoreLabel() {
+
+        String score = "-1";
+
+        try {
+            File myObj = new File("Score.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                score = myReader.nextLine();
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+
+        scoreLabel.setText(score);
     }
 
     public void switchBack(ActionEvent actionEvent) {

@@ -5,13 +5,10 @@ package org.example.project.Controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.example.project.Score;
 import org.example.project.benchmark.cpu.CPUThreadedRoots;
 import org.example.project.logging.ConsoleLogger;
 import org.example.project.logging.ILogger;
@@ -19,11 +16,15 @@ import org.example.project.logging.TimeUnit;
 import org.example.project.timing.ITimer;
 import org.example.project.timing.Timer;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import static java.lang.Math.log10;
+import static java.lang.Math.sqrt;
 
 
 public class PrimaryController implements Initializable {
@@ -38,8 +39,6 @@ public class PrimaryController implements Initializable {
 
     @FXML
     public TextField workload;
-
-	Score score = new Score();
 
 //	public String getSeqWriteResult() {
 //		return seqWriteResult;
@@ -90,12 +89,12 @@ public class PrimaryController implements Initializable {
 
 	//private Task copyWorker;
 
-//	Stage primeStage = null ;
-//
-//	private void ClosePrimaryWindow() {
-//		primeStage = (Stage) primeStage.getScene().getWindow();
-//		primeStage.close();
-//	}
+	Stage primeStage = null ;
+
+	private void ClosePrimaryWindow() {
+		primeStage = (Stage) workload.getScene().getWindow();
+		primeStage.close();
+	}
 
 	@FXML
 	private void Run() {
@@ -139,19 +138,40 @@ public class PrimaryController implements Initializable {
             log.writeTime("[t=" + i + "] Finished in", time, timeUnit);
         }
 
-        score.setScore(tempNrThreads*tempWorkload/time);
+        double score = ((sqrt(tempNrThreads)*tempWorkload) *1.0)/log10(time);
+
+		System.out.println(score);
+
+		///write in fisier
 
 
+			BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter("Score.txt"));
+			writer.write(String.valueOf(score));
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         System.out.println(tempNrThreads);
         System.out.println(tempWorkload);
 		System.out.println(tempNrThreads*tempWorkload/time);
 
+		Stage primaryStage = new Stage();
+
+		try {
+			Parent root = (Parent) FXMLLoader.load(Objects.requireNonNull(this.getClass().getClassLoader().getResource("Secondary.fxml")));
+			primaryStage.setTitle("SARE-Benchmark");
+			primaryStage.setScene(new Scene(root));
+			primaryStage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
 
-
-		//ClosePrimaryWindow();
+		ClosePrimaryWindow();
 	}
 
 
